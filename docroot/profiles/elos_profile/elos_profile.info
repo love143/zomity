@@ -1,0 +1,11 @@
+name = Elos
+description = Install profile for Elos themes
+version = VERSION
+core = 7.x
+
+files[] = elos_profile.profile
+
+version = "7.x-1.0-beta1"
+core = "7.x"
+project = "Elos"
+datestamp = "1365027012"

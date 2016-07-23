@@ -1,0 +1,473 @@
+/*
+ * jQuery MegaMenu v1.1
+ * http://megamenu.megadrupal.com/
+ *
+ * Copyright 2013 MegaDrupal
+ */
+
+(function($){
+
+    $(window).resize(function () {
+        $('.mdmegamenu').each(function() {
+            var self = $(this),
+                menuWidth = self.outerWidth(true);
+            var fullwidth = self.width(),
+                ww = $(window).width();
+                mmWidth = self.outerWidth();
+            
+
+
+            if (self.hasClass("md-vertical")) {
+                // vertical menu
+                // Right to left
+                if (self.hasClass("md-vertical-rtl")) {
+                    var ulwidth = $('> ul', self).width();
+                    var ulright = (ww - ($('> ul', self).offset().left + $('> ul', self).outerWidth())),
+                        
+                    fullwidth = ww - ulwidth - ulright - 20;
+                    if (fullwidth > mmWidth) fullwidth = mmWidth - ulwidth;
+                    $('div.mm-customwidth', self).each(function() {
+                        var thiswidth = parseInt($(this).data("width"));
+                        if(fullwidth < thiswidth) {
+                            $(this).addClass('mm-fullwidth');
+                        } else {
+                            $(this).width(thiswidth);
+                            $(this).removeClass('mm-fullwidth');
+                        }
+                    });
+                    if(ulwidth > (ww - ulright - 20) / 2) {
+                        $('.mm-container', self).each(function() {
+                            var parent = $(this).parent();
+                            $(this).css({top: parent.height(), left: 0});
+                            if($(this).hasClass("mm-fullwidth"))
+                                $(this).width(self.width());
+                        });
+                    } else {
+                        $('div.mm-fullwidth', self).width(fullwidth);
+                    }
+                }
+                else {
+                    // Left to right
+
+                    var ulwidth = $('> ul', self).width();
+                    var ulleft = $('> ul', self).offset().left;
+                    fullwidth = ww - ulwidth - ulleft - 20;
+                    if (fullwidth > mmWidth) fullwidth = mmWidth - ulwidth;
+                    $('div.mm-customwidth', self).each(function() {
+                        var thiswidth = parseInt($(this).data("width"));
+                        if(fullwidth < thiswidth) {
+                            $(this).addClass('mm-fullwidth');
+                        } else {
+                            $(this).width(thiswidth);
+                            $(this).removeClass('mm-fullwidth');
+                        }
+                    });
+                    if(ulwidth > (ww - ulleft - 20) / 2) {
+                        $('.mm-container', self).each(function() {
+                            var parent = $(this).parent();
+                            $(this).css({top: parent.height(), left: 0});
+                            if($(this).hasClass("mm-fullwidth"))
+                                $(this).width(self.width());
+                        });
+                    } else {
+                        $('div.mm-fullwidth', self).width(fullwidth);
+                    }
+                }
+
+            }
+            else {
+                if(self.hasClass('mm-fixed-bottom')) {
+                    _tmpheight = self.outerHeight() - parseInt(self.css('borderTopWidth')) - parseInt(self.css('borderBottomWidth'));
+                    $('> ul > li', self).each(function() {
+                        $("> .mm-container", $(this)).css('bottom', _tmpheight);
+                    });
+                } else {
+                    $('> ul > li', self).each(function() {
+                        $("> .mm-container", $(this)).css('top', $(this).height() + $(this).position().top);
+                    });
+                }
+                $('div.mm-customwidth', self).each(function() {
+                    var thiswidth = parseInt($(this).data("width"));
+                    /*if(fullwidth < thiswidth) {
+                        $(this).css({'left': 0, 'width': '100%'});
+                        $(this).addClass('mm-fullwidth');
+                    } else {*/
+                        $(this).width(thiswidth);
+                        $(this).removeClass('mm-fullwidth');
+                    //}
+                    var position = $(this).parent("li").position(),
+                        parentLeft = position.left,
+                        thisWidth = $(this).width(),
+                        thisRight = parentLeft + thisWidth;
+                    if (self.hasClass('mm-fixed-bottom') || self.hasClass('mm-fixed-top')) {
+                        menuWidth = menuWidth * 2;
+                    }
+                    if(thisRight > menuWidth) {
+                        mainSubLeft = menuWidth - thisWidth;
+                        if($.browser.msie) {
+                            if ((parseInt($.browser.version, 10) == 7) || (parseInt($.browser.version, 10) == 8) || (parseInt($.browser.version, 10) == 9))
+                                 mainSubLeft = menuWidth - thisWidth + 5;
+                        }
+                        $(this).css('left', mainSubLeft);
+                    } else {
+                        $(this).css('left', parentLeft);
+                    }
+                });
+                $(".mm-dropdown", self).each(function() {
+                    $(this).children('.mm-container').css('left', $(this).position().left);
+                });
+            }
+
+            $("div.mm-sub", self).each(function() {
+                var cols = $(this).children(".background-color").not(".mmg_12");
+                $(cols).each(function() {
+                    var col = $(this),
+                        _height = 0,
+                        mmcontainer = col.parents(".mm-container");
+
+                    mmcontainer.show();
+                    _height = col.parent().height();
+                    if(_height > 0) {
+                        col.height(_height);
+                    }
+                    mmcontainer.hide();
+                });
+            });
+
+            var typeMenu = self.data('type-responsive'),
+                $listmm = self.find('.megamenu'),
+                $toggleNav = $('.mdtoggle-nav', self),
+                widthScreen = window.innerWidth;
+
+            if (!self.hasClass('md-horizontal')){
+                $('.mm-container', self).css({left :  ''});
+            }
+            if (window.innerWidth <= typeMenu) {
+                var widthList = $listmm.width();
+                $toggleNav.show();
+                self.addClass('mm-responsive');
+            }
+            else {
+                $toggleNav.hide();
+                $listmm.css('display', '');
+                self.removeClass('mm-responsive');
+            }
+            // Reset Megamenu
+            $('.active', self).removeClass('active');
+            $('.deactive', self).removeClass('deactive');
+            $('.mm-hover', self).removeClass('mm-hover');
+            $('.mm-container', self).css({
+                display: ''
+            });
+
+            $('.mm-container', self).each (function () {
+                $(this).css('display', '');
+            })
+            // Process Menu Dropdown
+//            $('.megamenu >.mm-dropdown', self).css('position', 'relative');
+            $.each($('.megamenu >.mm-dropdown >ul.mm-container', self), function(){
+                $('.contrary', self).removeClass('contrary');
+                var first = true;
+                processSubContainer($(this), first);
+            });
+            function processSubContainer ($container, first) {
+                if (!$container.length)
+                    return true;
+
+                $container.css({
+                    display: 'block',
+                    opacity: 0
+                });
+                var width = $container.outerWidth(),
+                    left = $container.offset().left;
+
+                if (width + left > widthScreen){
+                    $container.addClass('contrary');
+                    if (first)
+                        $container.closest('.mm-item.mm-dropdown').css('position', 'relative');
+                }
+
+                processSubContainer($('>.mm-parent >.mm-container', $container));
+                $('ul.mm-container', self).css({
+                    display: '',
+                    opacity: ''
+                });
+            }
+        });
+    });
+
+    $.fn.megadrupalMenu = function(options){
+        var self = this,
+            $mdmegamenu = self.parent(),
+            typeMenu = $mdmegamenu.data('type-responsive'),
+            maxWidthMenu = 1000;
+        function megaOver(){
+            if (window.innerWidth > typeMenu) {
+                megaAction(this);
+            }
+        }
+        function megaOut(){
+            if (window.innerWidth > typeMenu) {
+                megaActionClose(this);
+
+            }
+        }
+        
+        function megaReset(megaMenu){
+            $('li', megaMenu).removeClass('mm-hover');
+            $('.mm-container', megaMenu).hide();
+        }
+
+        function megaAction(obj){
+
+            var $dropDown = $('> .mm-container', obj);
+            $(obj).parents(".mdmegamenu").find(".mm-container").not($(obj).parents(".mm-container")).hide();
+            $('.deactive', self).removeClass('deactive');
+            $(obj).siblings('.mm-parent').addClass('deactive');
+            $(obj).addClass('mm-hover');
+            if ($dropDown.length > 0 && $dropDown.is(':hidden') == false) return;
+            if($dropDown.is(':hidden')) {
+                switch(opts.effects.effectTypeOpen)
+                {
+                    case 'slide':
+                        $dropDown.stop(true, true).delay(opts.timeBeforeOpening)
+                        .slideDown(opts.effects.effectSpeedOpen, opts.effects.effectOpen, function () {
+                        });
+                        break;
+                    case 'fade':
+                        $dropDown.stop(true, true).delay(opts.timeBeforeOpening)
+                        .fadeIn(opts.effects.effectSpeedOpen, opts.effects.effectOpen, function () {
+                        });
+                        break;
+                    default :
+                        $dropDown.stop(true, true).delay(opts.timeBeforeOpening).show();
+                }
+            }
+        }
+        function megaActionClose(obj){
+            var $dropDown = $('> .mm-container', obj);
+            // $(obj).removeClass('active').addClass('deactive');
+            $(obj).siblings('.mm-parent').addClass('deactive');
+            $(obj).addClass('deactive');
+            if($dropDown.length > 0 && $dropDown.is(':hidden') == false) {
+                switch(opts.effects.effectTypeClose)
+                {
+                    case 'slide':
+                        $dropDown.stop(true, true).delay(opts.timeBeforeClosing)
+                        .slideUp(opts.effects.effectSpeedClose, opts.effects.effectClose, function(){
+                            $(obj).removeClass('mm-hover');  
+                        });
+                        break;
+                    case 'fade':
+                        $dropDown.stop(true, true).delay(opts.timeBeforeClosing)
+                        .fadeOut(opts.effects.effectSpeedClose, opts.effects.effectClose, function(){
+                            $(obj).removeClass('mm-hover');
+                        });
+                        break;
+                    default :
+                        $dropDown.stop(true, true).delay(opts.timeBeforeClosing).hide();
+                        $(obj).removeClass('mm-hover');
+                        
+                }
+            }
+            else {
+                $(obj).removeClass('mm-hover');
+            }
+        }
+
+        var opts = $.extend({
+            effects : {
+                effectSpeedOpen : 300,
+                effectSpeedClose : 200,
+                effectTypeOpen : 'slide',
+                effectTypeClose : 'slide',
+                effectOpen : 'linear',
+                effectClose : 'linear'
+            },
+            timeBeforeOpening : 100,
+            timeBeforeClosing : 200,
+            trigger : "hover-intent",
+            arrow: false,
+            vertical: false,
+            verticalDirection: "ltr", // ltr and rtl, default is ltr
+            subAlign: "middle"
+        }, options);
+        //Mobile - iOS
+        var deviceAgent = navigator.userAgent.toLowerCase();
+        var is_Mobile = deviceAgent.match(/(iphone|ipod|ipad|android|"windows phone")/);
+        return this.each(function() {
+            var megaMenu = $(this),
+                megaMenuWrap = megaMenu.parent(),
+                menuItem = $("li.mm-parent", megaMenu);
+
+            if (megaMenuWrap.hasClass('mm-fixed-bottom') || megaMenuWrap.hasClass('mm-fixed-top')){
+                $('.mm-toggle', megaMenuWrap).click(function(){
+                    $(this).toggleClass('mm-toggle-show');
+                    megaMenuWrap.toggleClass('mm-toggle-hide');
+                    $('> ul', megaMenuWrap).slideToggle();
+                    return false;
+                })
+            }
+
+            menuItem.each(function() {
+                var _self = $(this);
+
+                if(opts.arrow) {
+                    $("> a", _self).addClass('with-arrow').append('<span class="mm-arrow"></span>');
+                }
+
+                if (opts.vertical) {
+                    if(opts.subAlign == "middle") {
+                        var megamenuTop = self.position().top,
+                            position = _self.position(),
+                            parentTop = position.top,
+                            parentHeight = _self.height(),
+                            mainSub = $('> .mm-container', this),
+                            mainSubHeight = mainSub.height(),
+                            mainSubTop = (mainSubHeight/2 - parentHeight/2);
+                        offsetTop = parentTop - megamenuTop;
+                        if(parentTop >= mainSubTop)
+                            mainSub.css('top', - mainSubTop);
+                        else {
+                            mainSub.css('top', - offsetTop);
+                        }
+                    }
+                }
+            });
+
+            /* Actions on parents links */ 
+           if(opts.trigger === "hover") {
+                menuItem.hover(megaOver, megaOut);
+            } else if(opts.trigger === "click") {
+                $('body').mouseup(function(e){
+                      if (window.innerWidth > typeMenu) {
+                        if(!$(e.target).parents('.mm-hover').length){
+                            megaReset(megaMenu);
+                        }    
+                      }
+                });
+                $('> a', menuItem).click(function(e){
+                    if (window.innerWidth  >  typeMenu) { 
+                        var $parentLi = $(this).parent();
+                        if(!$parentLi.hasClass('mm-hover')){
+                            megaAction($parentLi);
+                            e.preventDefault();
+                        }
+                    }
+                });
+
+                $('.mm-arrow', menuItem).click (function (event) {
+                    
+                    var mmItem = $(this).closest('.mm-parent');
+                    if (mmItem.hasClass('mm-hover')) {
+                        event.stopPropagation();
+                        event.preventDefault();
+                        megaActionClose(mmItem);
+                    }
+                     
+                 });
+
+            } else {
+                var config = {
+                    sensitivity: 2, // number = sensitivity threshold (must be 1 or higher)
+                    interval: 100, // number = milliseconds for onMouseOver polling interval
+                    over: megaOver, // function = onMouseOver callback (REQUIRED)
+                    timeout: 400, // number = milliseconds delay before onMouseOut
+                    out: megaOut // function = onMouseOut callback (REQUIRED)
+                };
+                menuItem.hoverIntent(config);
+            }
+
+            if (is_Mobile) {
+                var text_arrow = "&darr;";
+                if (opts.vertical) text_arrow = "&rarr;";
+                $('<span class="mm-close">&times;</span>').appendTo($("> li.mm-parent > a", megaMenu)).hide().click(function(e) {
+                    e.preventDefault();
+                    "open" == $(this).attr("data-mega-status") ? (megaActionClose($(this).parents("li.mm-parent")[0]), $(this).html(text_arrow).attr("data-mega-status", "closed")) : (megaAction($(this).parents("li.mm-parent")[0]), $(this).html("&times;").attr("data-mega-status", "open"));
+                    return false;
+                });
+                $("> li.mm-parent", megaMenu).hover(function(e){
+                    e.preventDefault();
+                    $(this).find(".mm-close").html("&times;").attr("data-mega-status", "open").show();
+                    $(this).find(".mm-arrow").hide();
+                }, function(e){
+                    $(this).find(".mm-close").hide();
+                    $(this).find(".mm-arrow").show();
+                });
+            }
+            
+            // Add Events Anh Long Đập Trai
+            $('.mdtoggle-nav', $mdmegamenu).hide().click(function(){
+                $(this).toggleClass('rp-active');
+                self.slideToggle('slow');
+            });
+            $mdmegamenu.delegate('.mdtoggle-sub', 'click', function (event) {
+                event.stopPropagation();
+                var mmItem = $(this).closest('.mm-parent');
+
+                if (window.innerWidth <= typeMenu) {
+                    if (mmItem.hasClass('mm-hover')) {
+                        mmItem.removeClass('mm-hover');
+                        $(this).nextAll('.mm-container').slideUp('slow');
+                    }
+                    else {
+                        mmItem.addClass('mm-hover');   
+                        $(this).nextAll('.mm-container').slideDown('slow');
+                        
+                    }
+                    
+                }
+            });
+            $(window).resize();
+
+        });
+    };
+    $.megaCheckItemContrary = function ($parent, $mmcontainer, maxWidth){
+            if (!$mmcontainer.length)
+                return true;
+            $mmcontainer.css({
+                display: 'block',
+                opacity: 0
+            });
+            setTimeout(function(){
+                $mmcontainer.css({
+                    'display' : '',
+                    'opacity' : ''
+                });
+            },100);
+            var offsetLeft = $mmcontainer.offset().left,
+                width = $mmcontainer.outerWidth(),
+                $subContainer = $('>li.mm-parent >ul.mm-container', $mmcontainer);
+            if (offsetLeft + width > window.innerWidth){
+                $mmcontainer.addClass('contrary');
+                // $mmcontainer.data('offset-left', offsetLeft - width);
+            }
+            // else {
+            //     $mmcontainer.data('offset-left', width + offsetLeft);
+            // }
+            $.megaCheckItemContrary($mmcontainer, $subContainer, maxWidth);
+        }
+
+    $.megaCheckContrary = function(self) {
+             $('.contrary', self).removeClass('contrary');
+            var maxWidth = self.width(),
+                $mdmegamenu = self.parent();
+
+            $.each($('>.mm-item', self), function(){
+                var $mmcontainer = $(' >ul.mm-container', this),
+                    offsetLeft = 0;
+                if ($mdmegamenu.hasClass('md-horizontal')){
+                    $.each($(this).prevAll(), function(){
+                        offsetLeft += $(this).outerWidth();
+                    })
+                }
+                else {
+                    offsetLeft = $(this).outerWidth();
+                }
+                $(this).data('offset-left', offsetLeft);
+
+                $.megaCheckItemContrary($(this), $mmcontainer, maxWidth)
+            });
+        }
+})(jQuery);
+
