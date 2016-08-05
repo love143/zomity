@@ -5512,6 +5512,41 @@ div#block-views-1a69173523983cae4e8aa9c314ddd93f .view-content > .one-fourth:las
 .pdb25 {
   padding-bottom: 25px;
 }
+
+/* forms */
+
+/*Online Form styles*/
+
+#webform-client-form-216 { width: 70%;  margin: 0 auto; }
+
+.webform-client-form-216 .form-item{ display: block; width: 100%; margin-top: 15px; }
+
+.webform-client-form-216 label { width: 22%; display: inline-block; font-weight: 600; vertical-align: top; }
+.webform-client-form-216 label .form-required { color:red;}
+
+.webform-client-form-216 .form-text, .resizable {width: 60%; display: inline-block; border-radius: 10px; padding: 5px; border-style: solid !important; border-color: #aaa;}
+
+.webform-client-form-216 #edit-submitted-where-did-you-hear-about-us { width: 61%;  border-radius: 5px; padding: 6px; border-style: solid !important; border-color: #aaa; background-color: #fff;}
+
+.webform-client-form-216 .form-actions{ width: 30%; margin: 0 auto; }
+.webform-client-form-216 .form-submit{ margin: 30px 0; border-radius: 20px; border-style: none;}
+
+/* Second Form */
+
+#webform-client-form-226 { width: 70%;  margin: 0 auto; }
+
+.webform-client-form-226 .form-item{ display: block; width: 100%; margin-top: 15px; }
+
+.webform-client-form-226 label { width: 22%; display: inline-block; font-weight: 600; vertical-align: top; }
+.webform-client-form-226 label .form-required { color:red;}
+
+.webform-client-form-226 .form-text, .resizable {width: 60%; display: inline-block; border-radius: 10px; padding: 5px; border-style: solid !important; border-color: #aaa;}
+
+.webform-client-form-226 #edit-submitted-where-did-you-hear-about-us { width: 61%;  border-radius: 5px; padding: 6px; border-style: solid !important; border-color: #aaa; background-color: #fff;}
+
+.webform-client-form-226 .form-actions{ width: 30%; margin: 0 auto; }
+.webform-client-form-226 .form-submit{ margin: 30px 0; border-radius: 20px; border-style: none;}
+
 /* RecentBlogs */
 .field-name-field-categories-blog .field-item {
   display: inline-block;
