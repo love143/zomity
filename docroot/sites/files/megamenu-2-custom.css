@@ -1,0 +1,45 @@
+#megamenu-2.md-horizontal,
+#megamenu-2.md-vertical ul.megamenu {
+background-color: #000000;
+-webkit-border-radius: 5px;
+border-radius: 5px;
+}
+#megamenu-2 .mm-container {
+background-color: #ff0000;
+-webkit-border-radius: 5px;
+border-radius: 5px;
+}
+#megamenu-2 li.mm-hover > a,
+#megamenu-2 li.mm-hover > a:link,
+#megamenu-2 li.mm-hover > a:hover,
+#megamenu-2 .md-vertical li.mm-hover > a,
+#megamenu-2 .md-vertical li.mm-hover > a:link,
+#megamenu-2 .md-vertical li.mm-hover > a:hover  {
+background-color: #ff0000;
+color: #ffffff;
+-webkit-border-radius: 5px;
+border-radius: 5px;
+border-bottom: 2px solid #000000;
+}
+@media (min-width: 640px) {#megamenu-2 {width: 600px} 
+}#megamenu-2 .mm-item > a {font-size: 15px;}
+#megamenu-2 .mm-item > a,
+#megamenu-2 .mm-item > a:link {
+color: #ffffff;
+padding-bottom: 2px;
+}
+#megamenu-2 .mm-item > a:hover {
+color: #ff0000;
+background: #FFF;
+font-style: italic;
+}
+#megamenu-2 .mm-item > a:focus,
+#megamenu-2 .mm-item > a:active,
+#megamenu-2 .mm-item > a.active {
+color: #ff0000;
+}
+#megamenu-2 div.mm-container a,
+#megamenu-2 div.mm-container a:link {
+padding-bottom: 2px;
+}
+#megamenu-2 .mdtoggle-nav{color:  #; background: #;}

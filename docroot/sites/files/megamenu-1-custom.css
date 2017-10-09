@@ -1,0 +1,21 @@
+#megamenu-1.md-horizontal,
+#megamenu-1.md-vertical ul.megamenu {
+background-color: #ffffff;
+}
+#megamenu-1 li.mm-hover > a,
+#megamenu-1 li.mm-hover > a:link,
+#megamenu-1 li.mm-hover > a:hover,
+#megamenu-1 .md-vertical li.mm-hover > a,
+#megamenu-1 .md-vertical li.mm-hover > a:link,
+#megamenu-1 .md-vertical li.mm-hover > a:hover  {
+-webkit-border-radius: 5px;
+border-radius: 5px;
+border-right: 2px dashed #FFF;
+}
+@media (min-width: 640px) {#megamenu-1 {width: 1000px} 
+}#megamenu-1 .mm-item > a,
+#megamenu-1 .mm-item > a:link {
+color: #6980db;
+font-weight: bold;
+}
+#megamenu-1 .mdtoggle-nav{color:  #; background: #;}
